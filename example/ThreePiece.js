@@ -320,7 +320,7 @@ ThreePiece.prototype.PerspectiveCamera = function(o) {
 /////////////////////////////////////////////////////
 ThreePiece.prototype.Line = function(o) {
 	o.col = this.set(o.col, 0xFF0000);
-	o.linewidth = this.set(o.linewidth, 2);
+	o.linewidth = this.set(o.linewidth, 1);
 	o = this.setDefault(o);
 	o.x2 = this.set(o.x2, o.x + 1);
 	o.y2 = this.set(o.y2, o.y + 1);
