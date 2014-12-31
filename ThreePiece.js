@@ -21,8 +21,8 @@ var ThreePiece = function(id, w, h) {
 	var grid = {obj:'group', data:[]};
 	for (var i = 0; i <= 20; i++) {
 		var j = i - 10;
-		grid.data.push({obj:'line',x:j,y:-1,z:-50,x2:j,y2:0,z2:50,col:0x00FF00});
-		grid.data.push({obj:'line',x:-50,y:-1,z:j,x2:50,y2:0,z2:j,col:0x00FF00});
+		grid.data.push({obj:'line',x:j,y:-1,z:-50,x2:j,y2:-1,z2:50,col:0x00FF00});
+		grid.data.push({obj:'line',x:-50,y:-1,z:j,x2:50,y2:-1,z2:j,col:0x00FF00});
 	}
 	this.macro['grid'] = grid;
 
