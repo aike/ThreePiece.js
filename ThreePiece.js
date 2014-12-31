@@ -19,8 +19,8 @@ var ThreePiece = function(id, w, h) {
 		'ground':{obj: 'plane', w:1000, h:1000, y:-1, rx:Math.PI / -2, col:0x9999bb}
 	}
 	var grid = {obj:'group', data:[]};
-	for (var i = 0; i <= 20; i++) {
-		var j = i - 10;
+	for (var i = 0; i <= 30; i++) {
+		var j = i - 15;
 		grid.data.push({obj:'line',x:j,y:-1,z:-50,x2:j,y2:-1,z2:50,col:0x00FF00});
 		grid.data.push({obj:'line',x:-50,y:-1,z:j,x2:50,y2:-1,z2:j,col:0x00FF00});
 	}
