@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ThreePiece.js</title>
+    <script type="text/javascript" src="three.min.js"></script>
+    <script type="text/javascript" src="ThreePiece.js"></script>
+    <style>
+    body { margin: 0px 0px 80px 0px;}
+    h1 {
+        color:#444444;
+        background-color: #eeeedd;
+        margin: 0px;
+        padding: 10px 20px 10px 20px;
+        border-color: #888888;
+        border-width: 1px;
+        border-style: none none solid none;
+    }
+    h2 {
+        color:#444444;
+        margin: 20px 10px 0px 30px;
+        padding-bottom: 0px;
+        font-size: 20px;
+    }
+    p {
+        margin: 5px 40px 5px 40px;
+    }
+    pre {
+        width: 600px;
+        margin-top: 5px;
+        margin-left: 40px;
+        padding: 10px 10px 10px 10px;
+        background-color: #dddddd;
+        border:solid 1px #aaaaaa;
+        border-radius: 3px;
+    }
+    div {
+        margin-left: 40px;
+    }
+    </style>
+</head>
+
+
+<body>
+<h1>ThreePiece.js</h1>
+
+<h2>概要</h2>
+<p>
+ThreePiece.jsは、WebGLの3DCGをシンプルな記法で生成できるようにしたThree.jsのラッパーライブラリです。
+</p>
+<p>
+わずかな記述で3Dオブジェクトが表示できるように、各オブジェクトには省略可能なデフォルト値が設定されています。
+そのため、色、サイズ、位置などほとんどのパラメータを省略することが可能となっており、省略した場合は画面上の見やすい位置に見やすい色で表示されます。設定が難しいライトやカメラの記述も省略することで適切な初期値が設定されます。
+</p>
+<p>
+  <a href="https://github.com/aike/ThreePiece.js">https://github.com/aike/ThreePiece.js</a>
+</p>
+
+<h2>ボックスの表示</h2>
+<pre>
+var t1 = new ThreePiece('example1', 300, 200);
+t1.eval({obj:"box"});
+</pre>
+<div id="example1"></div>
+<script type="text/javascript">
+    var t1 = new ThreePiece('example1', 300, 200);
+    t1.eval({obj:"box"});
+</script>
+
+<h2>位置、サイズ、角度の指定</h2>
+<pre>
+var t2 = new ThreePiece('example2', 300, 200);
+var data2 = [
+        {obj:"grid"},
+        {obj:"box", x:-2, y:3, w:3, h:2, rx:0.5, ry:0.2, col:0x0000FF},
+    ];
+t2.eval(data2);
+</pre>
+<div id="example2"></div>
+<script type="text/javascript">
+    var t2 = new ThreePiece('example2', 300, 200);
+    var data2 = [
+            {obj:"grid"},
+            {obj:"box", x:-2, y:3, w:3, h:2, rx:0.5, ry:0.2, col:0x0000FF},
+        ];
+    t2.eval(data2);
+</script>
+
+<h2>視点の回転</h2>
+<pre>
+var t3 = new ThreePiece('example2', 300, 200);
+var data3 = [
+        {obj:"grid"},
+        {obj:"box", col:0xFFFF00},
+    ];
+t3.eval(data3);
+t3.rotate();
+</pre>
+<div id="example3"></div>
+<script type="text/javascript">
+    var t3 = new ThreePiece('example3', 300, 200);
+    var data3 = [
+            {obj:"grid"},
+            {obj:"box", col:0xFFFF00},
+        ];
+    t3.eval(data3);
+    t3.rotate();
+</script>
+
+<h2>各種オブジェクト</h2>
+<pre>
+var t4 = new ThreePiece('example4', 300, 200);
+var data4 = [
+        {obj:"ground"},
+        {obj:"box",      x:-3, y:0,   col:0x0000FF},
+        {obj:"sphere",   x: 0, y:0,   col:0x0088FF},
+        {obj:"plane",    x: 3, y:0,   col:0x00FF88},
+        {obj:"line",     x:-3, y:1.5, col:0x00FF00},
+        {obj:"circle",   x: 0, y:1.5, col:0x88FF00},
+        {obj:"cylinder", x: 3, y:1.5, col:0xFF8800},
+        {obj:"extrude",  x: 0, y:2.5, col:0xFF0000}
+    ];
+t4.eval(data4);
+t4.rotate(1);
+</pre>
+<div id="example4"></div>
+<script type="text/javascript">
+    var t4 = new ThreePiece('example4', 300, 200);
+    var data4 = [
+            {obj:"ground"},
+            {obj:"box",      x:-3, y:0,   col:0x0000FF},
+            {obj:"sphere",   x: 0, y:0,   col:0x0088FF},
+            {obj:"plane",    x: 3, y:0,   col:0x00FF88},
+            {obj:"line",     x:-3, y:1.5, col:0x00FF00},
+            {obj:"circle",   x: 0, y:1.5, col:0x88FF00},
+            {obj:"cylinder", x: 3, y:1.5, col:0xFF8800},
+            {obj:"extrude",  x: 0, y:2.5, col:0xFF0000}
+        ];
+    t4.eval(data4);
+    t4.rotate(1);
+</script>
+
+<h2>テクスチャー</h2>
+<pre>
+var t5 = new ThreePiece('example5', 300, 200);
+var data5 = [
+        {obj:"grid"},
+        {obj:"texture", name:"wood", file:"wood.jpg"},
+        {obj:"box", y:1, scale:2, tex:"wood"},
+    ];
+t5.eval(data5);
+t5.rotate();
+</pre>
+<div id="example5"></div>
+<script type="text/javascript">
+    var t5 = new ThreePiece('example5', 300, 200);
+    var data5 = [
+            {obj:"grid"},
+            {obj:"texture", name:"wood", file:"wood.jpg"},
+            {obj:"box", y:1, scale:2, tex:"wood"},
+        ];
+    t5.eval(data5);
+    t5.rotate();
+</script>
+
+
+<h2>オブジェクトに名前を付けて操作</h2>
+<pre>
+var t6 = new ThreePiece('example6', 300, 200);
+var data6 = [
+        {obj:"grid"},
+        {obj:"box", name:"box1"}
+    ];
+t6.eval(data6);
+var pos = 1;
+setInterval(function() {
+    pos = 1 - pos;
+    t6.obj("box1").position.y = pos;
+}, 500);
+</pre>
+<div id="example6"></div>
+<script type="text/javascript">
+    var t6 = new ThreePiece('example6', 300, 200);
+    var data6 = [
+            {obj:"grid"},
+            {obj:"box", name:"box1"}
+        ];
+    t6.eval(data6);
+    var pos = 1;
+    setInterval(function() {
+        pos = 1 - pos;
+        t6.obj("box1").position.y = pos;
+    }, 500);
+</script>
+
+<h2>グループ化</h2>
+<pre>
+var t7 = new ThreePiece('example7', 300, 200);
+var data7 = [
+        {obj:"grid"},
+        {obj:"group", name:"boxset", y:1, data:[
+            {obj:"box", x:-0.5, y:-0.5, col:0x0000FF},
+            {obj:"box", x: 0.5, y:-0.5, col:0xFF0000},
+            {obj:"box", x:-0.5, y: 0.5, col:0xFFFF00},
+            {obj:"box", x: 0.5, y: 0.5, col:0x00FFFF}
+        ]}
+    ];
+t7.eval(data7);
+var rot = 0;
+t7.hook = function() {
+    rot += 0.1;
+    t7.obj("boxset").rotation.y = rot;
+    t7.obj("boxset").rotation.z = rot;
+};
+</pre>
+<div id="example7"></div>
+<script type="text/javascript">
+    var t7 = new ThreePiece('example7', 300, 200);
+    var data7 = [
+            {obj:"grid"},
+            {obj:"group", name:"boxset", y:1, data:[
+                {obj:"box", x:-0.5, y:-0.5, col:0x0000FF},
+                {obj:"box", x: 0.5, y:-0.5, col:0xFF0000},
+                {obj:"box", x:-0.5, y: 0.5, col:0xFFFF00},
+                {obj:"box", x: 0.5, y: 0.5, col:0x00FFFF}
+            ]}
+        ];
+    t7.eval(data7);
+    var rot = 0;
+    t7.hook = function() {
+        rot += 0.1;
+        t7.obj("boxset").rotation.y = rot;
+        t7.obj("boxset").rotation.z = rot;
+    };
+</script>
+
+<h2>独自オブジェクトの定義</h2>
+<pre>
+var t8 = new ThreePiece('example8', 300, 200);
+t8.define("face", {obj:"group", name:"boxset", z:2, data:[
+            {obj:"box", col:0xEEEEEE},
+            {obj:"circle", w:0.1, z:0.51, x:-0.2, y:0.2, col:0x222222},
+            {obj:"circle", w:0.1, z:0.51, x: 0.2, y:0.2, col:0x222222},
+            {obj:"plane", w:0.6, h:0.2, z:0.51, y:-0.2, col:0xAA2222}
+        ]});
+var data8 = [
+        {obj:"grid"},
+        {obj:"face", x:-3, y:0},
+        {obj:"face", x: 0, y:0},
+        {obj:"face", x: 3, y:0}
+    ];
+t8.eval(data8);
+</pre>
+<div id="example8"></div>
+<script type="text/javascript">
+    var t8 = new ThreePiece('example8', 300, 200);
+    t8.define("face", {obj:"group", name:"boxset", z:2, data:[
+                {obj:"box", col:0xEEEEEE},
+                {obj:"circle", w:0.1, z:0.51, x:-0.2, y:0.2, col:0x222222},
+                {obj:"circle", w:0.1, z:0.51, x: 0.2, y:0.2, col:0x222222},
+                {obj:"plane", w:0.6, h:0.2, z:0.51, y:-0.2, col:0xAA2222}
+            ]});
+    var data8 = [
+            {obj:"grid"},
+            {obj:"face", x:-3, y:0},
+            {obj:"face", x: 0, y:0},
+            {obj:"face", x: 3, y:0}
+        ];
+    t8.eval(data8);
+</script>
+
+</body>
+</html>
