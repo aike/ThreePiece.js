@@ -21,8 +21,8 @@ var ThreePiece = function(id, w, h) {
 	var grid = {obj:'group', data:[]};
 	for (var i = 0; i <= 30; i++) {
 		var j = i - 15;
-		grid.data.push({obj:'line',x:j,y:-1,z:-50,x2:j,y2:-1,z2:50,col:0x00FF00});
-		grid.data.push({obj:'line',x:-50,y:-1,z:j,x2:50,y2:-1,z2:j,col:0x00FF00});
+		grid.data.push({obj:'line',x:j,y:-1,z:-50,tx:j,ty:-1,tz:50,col:0x00FF00});
+		grid.data.push({obj:'line',x:-50,y:-1,z:j,tx:50,ty:-1,tz:j,col:0x00FF00});
 	}
 	this.macro['grid'] = grid;
 
@@ -301,16 +301,29 @@ ThreePiece.prototype.PerspectiveCamera = function(o) {
 	o.x = this.set(o.x, 0);
 	o.y = this.set(o.y, 0.5);
 	o.z = this.set(o.z, 3);
-	o.tx = this.set(o.tx, 0);
-	o.ty = this.set(o.ty, 0);
-	o.tz = this.set(o.tz, 0);
+	var useRotation;
+	if (o.rx === undefined) {
+		useRotation = false;
+		o.tx = this.set(o.tx, 0);
+		o.ty = this.set(o.ty, 0);
+		o.tz = this.set(o.tz, 0);
+	} else {
+		useRotation = true;
+		o.rx = this.set(o.rx, 0);
+		o.ry = this.set(o.ry, 0);
+		o.rz = this.set(o.rz, 0);
+	}
 	o.fov = this.set(o.fov, 45);
 	o.name = this.set(o.name, 'camera');
 
 	var camera = new THREE.PerspectiveCamera(o.fov, this.width / this.height);
 	camera.position.set(o.x, o.y, o.z);
 	camera.rotation.order = 'ZXY';
-	camera.lookAt(new THREE.Vector3(o.tx, o.ty, o.tz));
+	if (useRotation) {
+		camera.rotation.set(o.rx, o.ry, o.rz);
+	} else {
+		camera.lookAt(new THREE.Vector3(o.tx, o.ty, o.tz));
+	}
 	this.objs[o.name] = camera;
 	this.scene.add(camera);
 
@@ -322,12 +335,12 @@ ThreePiece.prototype.Line = function(o) {
 	o.col = this.set(o.col, 0xFF0000);
 	o.linewidth = this.set(o.linewidth, 1);
 	o = this.setDefault(o);
-	o.x2 = this.set(o.x2, o.x + 1);
-	o.y2 = this.set(o.y2, o.y + 1);
-	o.z2 = this.set(o.z2, o.z);
+	o.tx = this.set(o.tx, o.x + 1);
+	o.ty = this.set(o.ty, o.y + 1);
+	o.tz = this.set(o.tz, o.z);
 	var geometry = new THREE.Geometry();
 	geometry.vertices.push(new THREE.Vector3(o.x, o.y, o.z));
-	geometry.vertices.push(new THREE.Vector3(o.x2, o.y2, o.z2));
+	geometry.vertices.push(new THREE.Vector3(o.tx, o.ty, o.tz));
 	var material = new THREE.LineBasicMaterial({color:o.col, linewidth:o.linewidth});
 	var mesh = new THREE.Line(geometry, material);
 	mesh.scale.set(o.scale, o.scale, o.scale);
@@ -445,8 +458,12 @@ ThreePiece.prototype.DirectionalLight = function(o) {
     o.x = this.set(o.x, -5);
     o.y = this.set(o.y,  5);
     o.z = this.set(o.z,  4);
+    o.tx = this.set(o.tx, 0);
+    o.ty = this.set(o.ty, 0);
+    o.tz = this.set(o.tz, 0);
 	var light = new THREE.DirectionalLight(o.col, o.intensity);
 	light.position.set(o.x, o.y, o.z);
+	light.target.position.set(o.tx, o.ty, o.tz);
 	return light;
 }
 
