@@ -38,7 +38,7 @@ another example:
 
 ##Method
 |name|description|
-|--|--|
+|:--:|:--|
 |ThreePiece(id, width, height)|constuctor|
 |eval(json)|draw objects defined in json|
 |obj(name)|get a object by name|
@@ -47,7 +47,7 @@ another example:
   
 ##Hook
 |name|description|
-|--|--|
+|:--:|:--|
 |hook|function hook of drawing loop|
   
 ---
@@ -55,7 +55,7 @@ another example:
 ##Properties of Object
 ###Line
 |category|property name|
-|--|--|
+|:--:|:--|
 |start point|x, y, z|
 |end point|tx, ty, tz|
 |size|linewidth, scale|
@@ -65,7 +65,7 @@ another example:
 
 ###Plane
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|w, h, scale|
 |rotation|rx, ry, rz|
@@ -74,7 +74,7 @@ another example:
 
 ###Circle
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|w, scale|
 |segments|segments|
@@ -84,7 +84,7 @@ another example:
 
 ###Box
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|w, h, d, scale|
 |rotation|rx, ry, rz|
@@ -93,7 +93,7 @@ another example:
 
 ###Sphere
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|w, scale|
 |segments|segments|
@@ -103,7 +103,7 @@ another example:
 
 ###Cylinder
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|h, radiustop, radiusbottom, scale|
 |segments|segments|
@@ -113,7 +113,7 @@ another example:
 
 ###Extrude
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|d, scale|
 |shape|shape|
@@ -123,7 +123,7 @@ another example:
 
 ###Group
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |size|scale|
 |rotation|rx, ry, rz|
@@ -131,7 +131,7 @@ another example:
 
 ###PerspectiveCamera (Camera)
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |point of view|tx, ty, tz|
 |rotation|rx, ry, rz|
@@ -140,7 +140,7 @@ another example:
 
 ###DirectionalLight
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |target position|tx, ty, tz|
 |color|col|
@@ -149,7 +149,7 @@ another example:
 
 ###SpotLight
 |category|property name|
-|--|--|
+|:--:|:--|
 |position|x, y, z|
 |target position|tx, ty, tz|
 |color|col|
@@ -161,14 +161,14 @@ another example:
 
 ###HemisphereLight
 |category|property name|
-|--|--|
+|:--:|:--|
 |color|col|
 |intensity|intensity|
 |name|object name|
 
 ###AmbientLight
 |category|property name|
-|--|--|
+|:--:|:--|
 |color|col|
 |name|object name|
 
