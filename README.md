@@ -39,16 +39,22 @@ another example:
 ##Method
 |name|description|
 |:--:|:--|
-|ThreePiece(id, width, height)|constuctor|
+|ThreePiece(id, width, height, useDirtyFlag)|constuctor|
 |eval(json)|draw objects defined in json|
 |obj(name)|get a object by name|
 |rotate(speed)|start rotate animation|
 |define(name, json)|define original object|
+|addHook(function)|add function hook of drawing loop|
+|useDirtyFlag()|enable dirty flag check for redraw|
+|setDirty()|turn on dirty flag|
   
-##Hook
+##Mouse Tracking
 |name|description|
 |:--:|:--|
-|hook|function hook of drawing loop|
+|enableMouseEvent()|enable mouse tracking event|
+|setMouseEnterCallback(objname, func)|set callback function of mouse enter event|
+|setMouseLeaveCallback(objname, func)|set callback function of mouse leave event|
+|getMouseOverObj()|get the name of mouse over object|
   
 ---
 

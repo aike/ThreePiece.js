@@ -207,11 +207,11 @@ var data7 = [
     ];
 t7.eval(data7);
 var rot = 0;
-t7.hook = function() {
+t7.addHook(function() {
     rot += 0.1;
     t7.obj("boxset").rotation.y = rot;
     t7.obj("boxset").rotation.z = rot;
-};
+});
 </pre>
 <div id="example7"></div>
 <script type="text/javascript">
@@ -227,11 +227,11 @@ t7.hook = function() {
         ];
     t7.eval(data7);
     var rot = 0;
-    t7.hook = function() {
+    t7.addHook(function() {
         rot += 0.1;
         t7.obj("boxset").rotation.y = rot;
         t7.obj("boxset").rotation.z = rot;
-    };
+    });
 </script>
 
 <h2>独自オブジェクトの定義</h2>

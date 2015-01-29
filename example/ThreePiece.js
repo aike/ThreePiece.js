@@ -1,18 +1,28 @@
 /*
  *
  * This program is licensed under the MIT License.
- * Copyright 2014, aike (@aike1000)
+ * Copyright 2015, aike (@aike1000)
  *
  */
-var ThreePiece = function(id, w, h) {
+var ThreePiece = function(id, w, h, useDirtyFlag) {
 	this.width = this.set(w, 768);
 	this.height = this.set(h, 576);
 
 	this.id = id;
-	this.hook = undefined;
+	this.hooks = [];
 	this.objs = {};
 	this.texture = {};
 	this.textureLoaded = 0;
+	this.dirtyCheck = this.set(useDirtyFlag, false);
+	this.dirtyflag = true;
+	this.mouseEvent = false;
+	this.mouseOverObj = undefined;
+	this.mouseEnterFunc = {};
+	this.mouseLeaveFunc = {};
+	this.mouse_ox = 0;
+	this.mouse_oy = 0;
+	this.namedObj = [];
+	this.namedObjname = [];
 	this.macro = {
 		'light':{obj:'group', data:[{obj:'directionalLight'}, {obj:'hemisphereLight'}]},
 		'camera':{obj:'perspectivecamera'},
@@ -168,6 +178,9 @@ ThreePiece.prototype.evalNode = function(json) {
 		case 'spotlight':
 			ret = this.SpotLight(o);
 			break;
+		case 'pointlight':
+			ret = this.PointLight(o);
+			break;
 
 		// Node Group
 		case 'group':
@@ -190,16 +203,9 @@ ThreePiece.prototype.evalNode = function(json) {
 		case 'sphere':
 			ret = this.Sphere(o);
 			break;
-
-//TODO:
-// Text
-// Parametric
-
-
 		case 'cylinder':
 			ret = this.Cylinder(o);
 			break;
-
 		case 'extrude':
 			ret = this.Extrude(o);
 			break;
@@ -207,6 +213,10 @@ ThreePiece.prototype.evalNode = function(json) {
 	}
 	if ('name' in o) {
 		this.objs[o.name] = ret;
+		if (ret) {
+			this.namedObj.push(ret);
+			this.namedObjname.push(o.name);
+		}
 	}
 
 	return ret;
@@ -225,7 +235,7 @@ ThreePiece.prototype.init = function() {
 	this.renderer = new THREE.WebGLRenderer({ antialias:true });
 	this.renderer.setSize(this.width, this.height);
 	this.renderer.setClearColor(0x000000, 1);
-	this.element.appendChild(this.renderer.domElement);	// append to <DIV>
+	this.element.appendChild(this.renderer.domElement);
 	this.canvas = this.element.lastChild;
 
 	///////// SCENE
@@ -239,10 +249,18 @@ ThreePiece.prototype.show = function() {
 	var self = this;
 	var render = function() {
 		window.requestAnimationFrame(render);
-		if (self.hook) {
-			self.hook();
+		for (n in self.hooks) {
+			var currentTime = (new Date).getTime();
+			self.hooks[n](currentTime - self.startTime);
 		}
-		self.renderer.render(self.scene, self.camera);
+		if (self.dirtyCheck) {
+			if (self.dirtyflag) {
+				self.renderer.render(self.scene, self.camera);
+				self.dirtyflag = false;
+			}
+		} else {
+			self.renderer.render(self.scene, self.camera);
+		}
 	};
 
 	// wait for texture loading before rendering
@@ -253,13 +271,9 @@ ThreePiece.prototype.show = function() {
 			render();
 		}
 	};
+	this.startTime = (new Date).getTime();
 	waitFunction();
 }
-
-ThreePiece.prototype.define = function(name, json) {
-	this.macro[name] = json;
-}
-
 
 ThreePiece.prototype.set = function(v, dval) {
 	return (v !== undefined ? v : dval);
@@ -277,10 +291,15 @@ ThreePiece.prototype.setDefault = function(o) {
 	o.w = this.set(o.w, 1);
 	o.h = this.set(o.h, 1);
 
+	o.opacity = this.set(o.opacity, 1);
+	var trans = false;
+	if (o.opacity < 1) {
+		trans = true;
+	}
 	o.material_opt = {
 		size: 1, blending: THREE.AdditiveBlending,
 		specular:0xffffff, shininess:1.2, metal:true,
-		transparent: false, depthTest: true
+		opacity:o.opacity, transparent: trans, depthTest: true
 	};
 
 	if (o.tex !== undefined) {
@@ -495,42 +514,120 @@ ThreePiece.prototype.SpotLight = function(o) {
 	return light;
 }
 
+ThreePiece.prototype.PointLight = function(o) {
+	this.lightExist = true;
+    o.col = this.set(o.col, 0xFFFFEE);
+    o.intensity = this.set(o.intensity, 1.0);
+    o.x = this.set(o.x, 0);
+    o.y = this.set(o.y,  3);
+    o.z = this.set(o.z,  0);
+	o.distance = this.set(o.distance, 0);
+	var light = new THREE.PointLight(o.col, o.intensity, o.distance);
+	light.position.set(o.x, o.y, o.z);
+	return light;
+}
+
 /////////////////////////////////////////////////////
 ThreePiece.prototype.obj = function(name) {
 	return this.objs[name];
+}
+
+ThreePiece.prototype.resize = function(width, height) {
+	this.width = width;
+	this.height = height;
+	this.element.style.width = width + 'px';
+	this.element.style.height = height + 'px';
+	this.renderer.setSize(width, height);
+	this.camera.aspect = width / height;
+	this.camera.updateProjectionMatrix();
+}
+
+ThreePiece.prototype.addHook = function(func) {
+	this.hooks.push(func);
 }
 
 ThreePiece.prototype.rotate = function(speed) {
 	speed = this.set(speed, -1);
 	var self = this;
 	var angle = 0;
-	this.hook = function() {
+	this.addHook(function() {
 		angle += speed * 0.005;
 		self.objs['world'].rotation.y = angle;
-	};
+	});
 }
 
-/*
+ThreePiece.prototype.define = function(name, json) {
+	this.macro[name] = json;
+}
 
-mouseover
-mouse in
-mouse out
-mouse click
+ThreePiece.prototype.useDirtyFlag = function() {
+	this.dirtyCheck = true;
+}
 
-*/
-ThreePiece.prototype.onmousemove = function(e) {
+ThreePiece.prototype.setDirty = function() {
+	this.dirtyflag = true;
+}
+
+////////////////////////////
+ThreePiece.prototype.enableMouseEvent = function(flag) {
+	this.mouseEvent = flag;
+	if (flag) {
+		var self = this;
+		this.element.addEventListener("mousemove", function(e) {self.checkMouseOver(e);});
+	}
+}
+
+ThreePiece.prototype.setMouseEnterCallback = function(objname, func) {
+	this.mouseEnterFunc[objname] = func;
+}
+
+ThreePiece.prototype.setMouseLeaveCallback = function(objname, func) {
+	this.mouseLeaveFunc[objname] = func;
+}
+
+ThreePiece.prototype.getMouseOverObj = function() {
+	return this.mouseOverObj;
+}
+
+ThreePiece.prototype.checkMouseOver = function(e) {
+	if (this.projector == undefined) {
+		this.projector = new THREE.Projector();		
+	}
     var rect = e.target.getBoundingClientRect();
     var mouseX = e.clientX - rect.left;
     var mouseY = e.clientY - rect.top;
-    mouseX =  (mouseX/window.innerWidth)  * 2 - 1;
-    mouseY = -(mouseY/window.innerHeight) * 2 + 1;
-    var pos = new THREE.Vector3(mouseX, mouseY, 1);
-    projector.unprojectVector(pos, this.camera);
-    var ray = new THREE.Raycaster(this.camera.position, pos.sub(this.camera.position).normalize());
-    var objs = ray.intersectObjects(this.scene.children);
-    if (objs.length > 0) {
-        // 交差していたらobjsが1以上になるので、やりたいことをやる。
-        objs[0].object.position.x = 2;
-
+    mouseX =  (mouseX/this.width)  * 2 - 1;
+    mouseY = -(mouseY/this.height) * 2 + 1;
+    if ((mouseX == this.mouse_ox) && (mouseY == this.mouse_oy)) {
+    	return;
     }
+    this.mouse_ox = mouseX;
+    this.mouse_oy = mouseY;
+    var pos = new THREE.Vector3(mouseX, mouseY, 1);
+    this.projector.unprojectVector(pos, this.camera);
+    var ray = new THREE.Raycaster(this.camera.position, pos.sub(this.camera.position).normalize());
+
+    var objname = undefined;
+    var dist = 99999;
+    var target = undefined;
+    for (var n in this.namedObj) {
+    	var o = ray.intersectObjects([this.namedObj[n]], true);
+    	if ((o.length > 0) && (o[0].distance < dist)) {
+    		dist = o[0].distance;
+    		objname = this.namedObjname[n];
+    		target = o[0].object;
+    	}
+	}
+
+    if (objname != this.mouseOverObj) {
+    	if ((this.mouseOverObj !== undefined) && (this.mouseLeaveFunc[this.mouseOverObj] !== undefined)){
+    		var obj = this.obj(this.mouseOverObj);
+    		this.mouseLeaveFunc[this.mouseOverObj](obj);
+    	}
+    	if ((objname !== undefined) && (this.mouseEnterFunc[objname] !== undefined)){
+    		this.mouseEnterFunc[objname](target);
+    	}
+    	this.mouseOverObj = objname;
+    }
+
 }
