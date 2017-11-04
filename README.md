@@ -2,13 +2,13 @@ ThreePiece.js
 ====
 Easy WebGL Interface Library with Three.js
 
-##Example
+## Example
 http://aikelab.net/threepiece/
 
-##Description
+## Description
 ThreePiece.js is a wrapper of Three.js. It provides very concise interface to draw 3DCG objects.
 
-##How To Use
+## How To Use
 load script with Three.js
 
     <script type="text/javascript" src="three.min.js"></script>
@@ -36,7 +36,7 @@ another example:
 
 ---
 
-##Method
+## Method
 |name|description|
 |:--:|:--|
 |ThreePiece(id, width, height, useDirtyFlag)|constuctor|
@@ -48,7 +48,7 @@ another example:
 |useDirtyFlag()|enable dirty flag check for redraw|
 |setDirty()|turn on dirty flag|
   
-##Mouse Tracking
+## Mouse Tracking
 |name|description|
 |:--:|:--|
 |enableMouseEvent()|enable mouse tracking event|
@@ -58,8 +58,8 @@ another example:
   
 ---
 
-##Properties of Object
-###Line
+## Properties of Object
+### Line
 |category|property name|
 |:--:|:--|
 |start point|x, y, z|
@@ -69,7 +69,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Plane
+### Plane
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -78,7 +78,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Circle
+### Circle
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -88,7 +88,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Box
+### Box
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -97,7 +97,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Sphere
+### Sphere
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -107,7 +107,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Cylinder
+### Cylinder
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -117,7 +117,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Extrude
+### Extrude
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -127,7 +127,7 @@ another example:
 |material|col, tex|
 |name|object name|
 
-###Group
+### Group
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -135,7 +135,7 @@ another example:
 |rotation|rx, ry, rz|
 |name|object name|
 
-###PerspectiveCamera (Camera)
+### PerspectiveCamera (Camera)
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -144,7 +144,7 @@ another example:
 |field of view|fov|
 |name|object name (default name is "camera")|
 
-###DirectionalLight
+### DirectionalLight
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -153,7 +153,7 @@ another example:
 |intensity|intensity|
 |name|object name|
 
-###SpotLight
+### SpotLight
 |category|property name|
 |:--:|:--|
 |position|x, y, z|
@@ -165,14 +165,14 @@ another example:
 |exponent|exponent|
 |name|object name|
 
-###HemisphereLight
+### HemisphereLight
 |category|property name|
 |:--:|:--|
 |color|col|
 |intensity|intensity|
 |name|object name|
 
-###AmbientLight
+### AmbientLight
 |category|property name|
 |:--:|:--|
 |color|col|
@@ -180,5 +180,5 @@ another example:
 
 ---
 
-##Credit
+## Credit
 ThreePiece.js is licenced under MIT License. Copyright 2014, aike (@aike1000)
